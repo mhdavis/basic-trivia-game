@@ -4,11 +4,15 @@ $(document).ready(function() {
   runGame();
 
   function runGame() {
+    //-------------------------------------------------------------------
+
+    // SET UP VARIABLES
     let correctQuestions = 0;
     let totalQuestions = 0;
     let questionsAsked = [];
     let questionsArr;
     let questionCap = 5;
+    let randNum;
 
     $("#start-game-panel").show();
     $("#question-panel").hide();
@@ -16,76 +20,97 @@ $(document).ready(function() {
     $("#wrong-panel").hide();
     $("#final-panel").hide();
 
-    let randNum;
+    //-------------------------------------------------------------------
 
-    $(".difficulty-button").on("click", function (e) {
+  //EVENT HANDLERS
+  $(".difficulty-button").on("click", function (e) {
 
-      function setFirstQuestion() {
-        randNum = Math.floor(Math.random() * questionsArr.length);
-        setQuestion(questionsArr[randNum]);
-        totalQuestions++;
-        questionsAsked.push(questionsArr[randNum].id);
-        $("#question-number").html(totalQuestions);
-        $("#start-game-panel").hide();
-        return $("#question-panel").show();
-      }
+    if (e.target.id === "easy-button") {
+      questionsArr = easyQuestions;
+      randNum = Math.floor(Math.random() * questionsArr.length);
+      setFirstQuestion(questionsArr, randNum);
 
-      if (e.target.id === "easy-button") {
-        questionsArr = easyQuestions;
-        setFirstQuestion();
+    } else if (e.target.id === "medium-button") {
+      questionsArr = mediumQuestions;
+      randNum = Math.floor(Math.random() * questionsArr.length);
+      setFirstQuestion(questionsArr, randNum);
 
-      } else if (e.target.id === "medium-button") {
-        questionsArr = mediumQuestions;
-        setFirstQuestion();
+    } else if (e.target.id === "hard-button") {
+      questionsArr = hardQuestions;
+      randNum = Math.floor(Math.random() * questionsArr.length);
+      setFirstQuestion(questionsArr, randNum);
+    }
+  });
 
-      } else if (e.target.id === "hard-button") {
-        questionsArr = hardQuestions;
-        setFirstQuestion();
-      }
-    });
+  $(".response-button").on("click", function() {
+      let userGuess = $(this).text();
+      let currentQuestion = questionsArr[randNum];
+      let currentQuestionID = currentQuestion.id;
+      let currentQuestionAnswer = currentQuestion.answer;
+      checkQuestion(currentQuestionAnswer, currentQuestionID, userGuess);
+      generateNewQuestion(questionsArr, questionsAsked, randNum);
+  });
 
-    $(".response-button").on("click", function() {
+  $("#restart-button").on('click', function() {
+      $("#final-panel").hide();
+      runGame();
+  });
+
+  $(".continue-button").on("click", function() {
+      // hides current window and shows question panel with brand new question
+      $("#question-panel").show();
+      $("#correct-panel").hide();
+      $("#wrong-panel").hide();
+  });
+
+  //-------------------------------------------------------------------
+
+    //DEFINE FUNCTIONS
+
+    function setQuestion(obj) {
+      $("#question-text").html(obj.question);
+
+      for (i=0; i < obj.responses.length; i++) {
+          let buttonNumber = (i + 1).toString();
+          $("#" + buttonNumber).html(obj.responses[i]);
+      } // end for loop
+    } // end setQuestion function
+
+    function setFirstQuestion(arr, num) {
+      let firstQuestion = arr[num];
+      setQuestion(firstQuestion);
+      totalQuestions++;
+      questionsAsked.push(firstQuestion.id);
+      $("#question-number").html(totalQuestions);
+      $("#start-game-panel").hide();
+      return $("#question-panel").show();
+    }
+
+    function checkQuestion(answer, id, guess) {
 
       if (questionsAsked.length < questionCap) {
         totalQuestions++;
         $("#question-number").html(totalQuestions);
 
-
-        if ($(this).text() === questionsArr[randNum].answer) {
+        if (guess === answer) {
           // if the user gets the question right
           $("#question-panel").hide();
           $("#correct-panel").show();
           correctQuestions++;
-          console.log(correctQuestions);
-          questionsAsked.push(questionsArr[randNum].id);
-
-          // set a new random number that isn't in array of questions thus asked
-          let running = true;
-          while (running) {
-              randNum = Math.floor(Math.random()*questionsArr.length);
-              if (questionsAsked.indexOf(randNum) === -1) {
-                  setQuestion(questionsArr[randNum]);
-                  running = false;
-              }
-          }
+          return questionsAsked.push(id);
 
         } else {
-          // if the user gets the question wrong
+
           $("#question-panel").hide();
           $("#wrong-panel").show();
-          questionsAsked.push(questionsArr[randNum].id);
+          return questionsAsked.push(id);
 
-          let running = true;
-          while (running) {
-              randNum = Math.floor(Math.random()*questionsArr.length);
-              if (questionsAsked.indexOf(randNum) === -1) {
-                  setQuestion(questionsArr[randNum]);
-                  running = false;
-              }
-          }
-        }
-
+        } // end else statement
       } else {
+
+        if (guess === answer) {
+          correctQuestions++;
+        }
 
         $("#numerator").html(correctQuestions);
         $("#denominator").html(questionCap);
@@ -94,33 +119,26 @@ $(document).ready(function() {
         $(".difficult-button").off();
         $(".response-button").off();
         $("#question-panel").hide();
-        $("#final-panel").show();
+        return $("#final-panel").show();
 
-      }
-    });
-  }
+      } // end end statement
+    } // end checkQuestion function
 
-  $("#restart-button").on('click', function() {
-      $("#final-panel").hide();
-      runGame();
-  });
+    function generateNewQuestion(arr1, arr2, num) {
+      let running = true;
+      while (running) {
+          num = Math.floor(Math.random()*arr1.length);
+          if (arr2.indexOf(num) === -1) {
+              setQuestion(arr1[num]);
+              running = false;
+          } // end if statement;
+      } // end while loop
+    } // end generateNewQuestion function
 
-  $(".continue-button").on("click", function(e) {
-      // hides current window and shows question panel with brand new question
-      $("#question-panel").show();
-      $("#correct-panel").hide();
-      $("#wrong-panel").hide();
-  });
+    //-------------------------------------------------------------------
 
-  function setQuestion(obj) {
-    $("#question-text").html(obj.question);
-
-    for (i=0; i < obj.responses.length; i++) {
-        let buttonNumber = (i + 1).toString();
-        $("#" + buttonNumber).html(obj.responses[i]);
-    }
-  }
-});
+} // end runGame function
+}); // end document.ready()
 
 
 const easyQuestions = [
