@@ -1,40 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width", initial-scale="1.0">
-    <title>Super Hero Trivia</title>
 
-    <!-- jQuery -->
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.min.js"
-      integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-      crossorigin="anonymous"></script>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width" , initial-scale="1.0">
+  <title>Super Hero Trivia</title>
 
-    <!-- font -->
-    <link href="https://fonts.googleapis.com/css?family=Comfortaa|Orbitron" rel="stylesheet">
-    <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
- integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 
-    <!-- Fonts -->
+  <!-- font -->
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Orbitron" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
-    <!-- Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- Fonts -->
 
-    <!-- JS -->
-    <script src="assets/js/script.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-  </head>
-  <body>
+  <!-- JS -->
+  <script src="assets/js/script.js"></script>
 
-    <div id="custom-container" class="container">
-      <div class="row">
-        <div class="col-lg-6-offset-3 col-md-6-offset-3 col-sm-6-offset-3 col-xs-6-offset-3">
+</head>
+
+<body>
+
+  <div id="custom-container" class="container text-center">
+    <div class="row">
+      <div class="col-lg-4-offset-4 col-md-4-offset-4 col-sm-4-offset-4 col-xs-4-offset-4">
 
         <div id="start-game-panel" class="quiz-block">
           <h1>Super Hero Trivia</h1>
@@ -46,14 +43,15 @@
 
         <div id="question-panel" class="quiz-block">
           <h3> Question <span id="question-number"></span></h3>
-          <p id="question-text"><p>
-          <div>
-            <button id="1" class="response-button"></button>
-            <button id="2" class="response-button"></button>
-            <button id="3" class="response-button"></button>
-            <button id="4" class="response-button"></button>
-          </div>
-          <h3 class="timer-panel">Timer: <span id="timer"></span></h3>
+          <p id="question-text">
+            <p>
+              <div>
+                <button id="1" class="response-button"></button>
+                <button id="2" class="response-button"></button>
+                <button id="3" class="response-button"></button>
+                <button id="4" class="response-button"></button>
+              </div>
+              <h3 class="timer-panel">Timer: <span id="timer"></span></h3>
         </div>
 
         <div id="correct-panel" class="quiz-block">
@@ -78,5 +76,6 @@
       </div>
     </div>
 
-  </body>
+</body>
+
 </html>
