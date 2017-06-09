@@ -11,6 +11,7 @@ $(document).ready(function() {
     let totalQuestions = 0;
     let questionsAsked = [];
     let questionsArr;
+    let questionsIdArr;
     let questionCap = 5;
     let randNum;
 
@@ -27,6 +28,7 @@ $(document).ready(function() {
 
       if (e.target.id === "easy-button") {
         questionsArr = easyQuestions;
+        questionsIdArr =
         randNum = Math.floor(Math.random() * questionsArr.length);
         setFirstQuestion(questionsArr, questionsAsked, randNum);
 
@@ -54,18 +56,6 @@ $(document).ready(function() {
         totalQuestions++;
         $("#question-number").html(totalQuestions);
         checkQuestion(currentQuestionAnswer, currentQuestionID, userGuess, questionsAsked);
-
-        function gen (num) {
-          if (questionsAsked.indexOf(num) === -1) {
-            return num;
-          } else {
-            return gen(num);
-          }
-        }
-
-        // while the question hasn't already been asked
-        console.log("Questioned Asked: " +  questionsAsked);
-
         setQuestion(questionsArr[randNum]);
 
       } else {
@@ -101,9 +91,22 @@ $(document).ready(function() {
     //-------------------------------------------------------------------
 
     //DEFINE FUNCTIONS
+    function shuffle(array) {
+      var m = array.length, t, i;
+      // While there remain elements to shuffle…
+      while (m) {
+        // Pick a remaining element…
+        i = Math.floor(Math.random() * m--);
+        // And swap it with the current element.
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+      }
+
+      return array;
+    }
 
     function setQuestion(obj) {
-
       $("#question-text").html(obj.question);
       for (i = 0; i < obj.responses.length; i++) {
         let buttonNumber = (i + 1).toString();
@@ -148,9 +151,7 @@ $(document).ready(function() {
       let running = true;
       while (running) {
         num = Math.floor(Math.random() * arr1.length);
-        console.log("generated values: " + num);
         if (arr2.indexOf(num) === -1) {
-          console.log("Final value: " + num);
           running = false;
           return setQuestion(randomQuestion);
         } // end if statement;
