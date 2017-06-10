@@ -1,6 +1,41 @@
+body {
+  background-image: url("../img/superheroes_background.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
 .quiz-block {
   border-radius: 30px;
   padding: 2em 0 2em;
   margin: 50px;
-  background-color: rgba(149, 242, 152, 0.5);
+  background-color: rgba(224, 241, 255, 0.9);
+  font-family: 'Catamaran', sans-serif;
+}
+
+.quiz-block > p {
+  margin: 1.2em 0 1.2em;
+  font-size: 1.3em;
+}
+
+.trivia-title {
+  font-family: 'Permanent Marker', cursive;
+}
+
+.custom-button-style {
+  background-color: rgb(37, 118, 255);
+  font-family: 'Chewy', cursive;
+  color: white;
+  margin: 0.5em;
+}
+.custom-button-style:hover {
+  background-color: rgb(111, 163, 250);
+  color: white;
+}
+
+#correct-title {
+  color: rgb(0, 161, 16);
+}
+
+#wrong-title {
+  color: rgb(209, 0, 44);
 }
