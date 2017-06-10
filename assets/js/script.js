@@ -308,8 +308,8 @@ const hardQuestions = [{
   {
     id: 5,
     question: "Which of the following individuals have NOT dawned the Spiderman mantle?",
-    responses: ["Miles Morales", "Ben Riley", "The Flash", "Miguel O'Hara"],
-    answer: "Batman"
+    responses: ["Miles Morales", "Ben Riley", "Bobby Drake", "Miguel O'Hara"],
+    answer: "Bobby Drake"
   },
   {
     id: 6,
