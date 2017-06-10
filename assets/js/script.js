@@ -6,14 +6,13 @@ $(document).ready(function() {
   function runGame() {
     //-------------------------------------------------------------------
 
-    // SET UP VARIABLES
+    let cap = 5;
     let correctQuestions = 0;
     let totalQuestions = 0;
-    let questionsAsked = [];
     let questionsArr;
-    let questionsIdArr;
-    let questionCap = 5;
-    let randNum;
+    let questionsArrTotal = 10;
+    let questionNumbersArr = generateArray(questionsArrTotal);
+    let questionIndex = 0;
 
     $("#start-game-panel").show();
     $("#question-panel").hide();
@@ -28,51 +27,64 @@ $(document).ready(function() {
 
       if (e.target.id === "easy-button") {
         questionsArr = easyQuestions;
-        questionsIdArr =
-        randNum = Math.floor(Math.random() * questionsArr.length);
-        setFirstQuestion(questionsArr, questionsAsked, randNum);
 
       } else if (e.target.id === "medium-button") {
         questionsArr = mediumQuestions;
-        randNum = Math.floor(Math.random() * questionsArr.length);
-        setFirstQuestion(questionsArr, questionsAsked, randNum);
 
       } else if (e.target.id === "hard-button") {
         questionsArr = hardQuestions;
-        randNum = Math.floor(Math.random() * questionsArr.length);
-        setFirstQuestion(questionsArr, questionsAsked, randNum);
       }
+
+      questionNumbersArr = shuffle(questionNumbersArr);
+      console.log("shuffled question numbers: " + questionNumbersArr);
+      let difRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
+      console.log("Difficulty Random Question: " + difRandomQuestion);
+      setQuestion(difRandomQuestion);
+
+      totalQuestions++;
+      $("#question-number").html(totalQuestions);
+
+      $("#start-game-panel").hide();
+      $("#question-panel").show();
     });
 
     $(".response-button").on("click", function() {
+
       let userGuess = $(this).text();
-      let currentQuestion = questionsArr[randNum];
-      let currentQuestionResponses = currentQuestion.responses;
-      let currentQuestionID = currentQuestion.id;
-      let currentQuestionAnswer = currentQuestion.answer;
+      let currentQuestion = questionsArr[questionNumbersArr[questionIndex]];
+      console.log("-------------------------------------------");
+      console.log("Current Question: " + currentQuestion);
+      let cQID = currentQuestion.id;
+      console.log("Current Question ID: " + cQID);
+      let cQAnswer = currentQuestion.answer;
+      console.log("Current Question Answer: " + cQAnswer);
 
-      if (questionsAsked.length < questionCap) {
+      if (questionIndex + 1 === cap) {
 
-        totalQuestions++;
-        $("#question-number").html(totalQuestions);
-        checkQuestion(currentQuestionAnswer, currentQuestionID, userGuess, questionsAsked);
-        setQuestion(questionsArr[randNum]);
-
-      } else {
-
-        if (userGuess === currentQuestionAnswer) {
+        if (userGuess === cQAnswer) {
           correctQuestions++;
         }
 
         $("#numerator").html(correctQuestions);
-        $("#denominator").html(questionCap);
-        let percentRight = Math.round((correctQuestions / questionCap) * 100);
+        $("#denominator").html(cap);
+        let percentRight = Math.round((correctQuestions / cap) * 100);
         $("#percentage-correct").html(percentRight);
-        $(".difficult-button").off();
-        $(".response-button").off();
-        $("#question-panel").hide();
-        return $("#final-panel").show();
 
+        $("#question-panel").hide();
+        $("#final-panel").show();
+
+        $(".difficulty-button").off();
+        $(".response-button").off();
+
+      } else {
+
+        totalQuestions++;
+        $("#question-number").html(totalQuestions);
+        checkQuestion(cQAnswer, cQID, userGuess);
+
+        questionIndex++;
+        let respRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
+        setQuestion(respRandomQuestion);
       }
     });
 
@@ -90,9 +102,17 @@ $(document).ready(function() {
 
     //-------------------------------------------------------------------
 
-    //DEFINE FUNCTIONS
+    function generateArray(num) {
+      let product = [];
+      for (i = 1; i < num + 1; i++) {
+        product.push(i);
+      }
+      return product;
+    }
+
     function shuffle(array) {
-      var m = array.length, t, i;
+      var m = array.length,
+        t, i;
       // While there remain elements to shuffle…
       while (m) {
         // Pick a remaining element…
@@ -114,49 +134,22 @@ $(document).ready(function() {
       } // end for loop
     } // end setQuestion function
 
-    function setFirstQuestion(arr1, arr2, num) {
-      let firstQuestion = arr1[num];
-      setQuestion(firstQuestion);
-      totalQuestions++;
-      arr2.push(firstQuestion);
-      $("#question-number").html(totalQuestions);
-      $("#start-game-panel").hide();
-      return $("#question-panel").show();
-    }
 
-    function checkQuestion(answer, id, guess, arr) {
+    function checkQuestion(answer, id, guess) {
 
       if (guess === answer) {
         // if the user gets the question right
         $("#question-panel").hide();
         $("#correct-panel").show();
         correctQuestions++;
-        return arr.push(id);
 
       } else {
 
         $("#question-panel").hide();
         $("#wrong-panel").show();
-        return arr.push(id);
 
       } // end else statement
     } // end checkQuestion function
-
-
-    //arr1  = questionsArr
-    //num = random number
-    //arr2 = asked questions
-    function generateNewQuestion(arr1, arr2, num) {
-      let randomQuestion = arr1[num].id;
-      let running = true;
-      while (running) {
-        num = Math.floor(Math.random() * arr1.length);
-        if (arr2.indexOf(num) === -1) {
-          running = false;
-          return setQuestion(randomQuestion);
-        } // end if statement;
-      } // end while loop
-    } // end generateNewQuestion function
 
     //-------------------------------------------------------------------
 
@@ -164,8 +157,7 @@ $(document).ready(function() {
 }); // end document.ready()
 
 
-const easyQuestions = [
-  {
+const easyQuestions = [{
     id: 1,
     question: "Which Superhero wears a pointed cowl?",
     responses: ["Batman", "Superman", "The Flash", "Aquaman"],
@@ -224,7 +216,7 @@ const easyQuestions = [
     question: "Which Superhero villian is bald?",
     responses: ["Lex Luthor", "The Joker", "Gorilla Grod", "Ares"],
     answer: "Lex Luthor"
-  },
+  }
 ];
 
 const mediumQuestions = [{
@@ -348,5 +340,5 @@ const hardQuestions = [{
     question: "Hydro-Man is a villian to which Superhero?",
     responses: ["Spiderman", "Captain America", "The Human Torch", "Ironman"],
     answer: "Spiderman"
-  },
+  }
 ];
