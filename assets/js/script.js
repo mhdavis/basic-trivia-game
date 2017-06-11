@@ -11,7 +11,7 @@ $(document).ready(function() {
     let totalQuestions = 0;
     let questionsArr;
     let questionsArrTotal = 10;
-    let questionNumbersArr = generateArray(questionsArrTotal);
+    let questionNumbersArr = randomIndicesArr(cap, questionsArrTotal);
     let questionIndex = 0;
 
     $("#start-game-panel").show();
@@ -19,6 +19,7 @@ $(document).ready(function() {
     $("#correct-panel").hide();
     $("#wrong-panel").hide();
     $("#final-panel").hide();
+
 
     //-------------------------------------------------------------------
 
@@ -35,10 +36,7 @@ $(document).ready(function() {
         questionsArr = hardQuestions;
       }
 
-      questionNumbersArr = shuffle(questionNumbersArr);
-      console.log("shuffled question numbers: " + questionNumbersArr);
       let difRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
-      console.log("Difficulty Random Question: " + difRandomQuestion);
       setQuestion(difRandomQuestion);
 
       totalQuestions++;
@@ -46,18 +44,14 @@ $(document).ready(function() {
 
       $("#start-game-panel").hide();
       $("#question-panel").show();
+
     });
 
     $(".response-button").on("click", function() {
 
       let userGuess = $(this).text();
       let currentQuestion = questionsArr[questionNumbersArr[questionIndex]];
-      console.log("-------------------------------------------");
-      console.log("Current Question: " + currentQuestion);
-      let cQID = currentQuestion.id;
-      console.log("Current Question ID: " + cQID);
       let cQAnswer = currentQuestion.answer;
-      console.log("Current Question Answer: " + cQAnswer);
 
       if (questionIndex + 1 === cap) {
 
@@ -73,23 +67,25 @@ $(document).ready(function() {
         $("#question-panel").hide();
         $("#final-panel").show();
 
-        $(".difficulty-button").off();
-        $(".response-button").off();
+        reset();
 
       } else {
 
         totalQuestions++;
         $("#question-number").html(totalQuestions);
-        checkQuestion(cQAnswer, cQID, userGuess);
+        checkQuestion(cQAnswer, userGuess);
 
         questionIndex++;
         let respRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
+
         setQuestion(respRandomQuestion);
+
       }
     });
 
     $("#restart-button").on('click', function() {
       $("#final-panel").hide();
+      reset();
       runGame();
     });
 
@@ -101,30 +97,28 @@ $(document).ready(function() {
     });
 
     //-------------------------------------------------------------------
-
-    function generateArray(num) {
-      let product = [];
-      for (i = 1; i < num + 1; i++) {
-        product.push(i);
-      }
-      return product;
+    function reset() {
+      $(".difficulty-button").off();
+      $(".response-button").off();
+      return;
     }
 
-    function shuffle(array) {
-      var m = array.length,
-        t, i;
-      // While there remain elements to shuffle…
-      while (m) {
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-      }
+    /*
+    generates an array of individually unique
+    "max" indices, each from 1 to lng
+    */
+    function randomIndicesArr(max, lng) {
 
+      let array = [];
+      while (array.length < max) {
+        let rando = Math.floor(Math.random() * lng);
+        if (array.indexOf(rando) === -1) {
+          array.push(rando);
+        }
+      }
       return array;
     }
+
 
     function setQuestion(obj) {
       $("#question-text").html(obj.question);
@@ -135,7 +129,7 @@ $(document).ready(function() {
     } // end setQuestion function
 
 
-    function checkQuestion(answer, id, guess) {
+    function checkQuestion(answer, guess) {
 
       if (guess === answer) {
         // if the user gets the question right
