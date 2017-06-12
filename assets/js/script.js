@@ -14,6 +14,9 @@ $(document).ready(function() {
     let questionNumbersArr = randomIndicesArr(cap, questionsArrTotal);
     let questionIndex = 0;
 
+    let timeAmount = 60;
+    let intervalId;
+
     $("#start-game-panel").show();
     $("#question-panel").hide();
     $("#correct-panel").hide();
@@ -36,15 +39,19 @@ $(document).ready(function() {
         questionsArr = hardQuestions;
       }
 
+      // Loads up the first question into the question panel
       let difRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
       setQuestion(difRandomQuestion);
-
       totalQuestions++;
       $("#question-number").html(totalQuestions);
 
+      // displays the question panel
       $("#start-game-panel").hide();
       $("#question-panel").show();
 
+      // starts the timer
+      $(".timer").html(timeConvertor(timeAmount));
+      runTimer();
     });
 
     $(".response-button").on("click", function() {
@@ -53,7 +60,7 @@ $(document).ready(function() {
       let currentQuestion = questionsArr[questionNumbersArr[questionIndex]];
       let cQAnswer = currentQuestion.answer;
 
-      if (questionIndex + 1 === cap) {
+      if (timeAmount === 0 || questionIndex + 1 === cap) {
 
         if (userGuess === cQAnswer) {
           correctQuestions++;
@@ -97,6 +104,45 @@ $(document).ready(function() {
     });
 
     //-------------------------------------------------------------------
+    // TIMER RELATED FUNCTIONS
+    function runTimer() {
+      intervalId = setInterval(decrementTimer, 1000);
+    }
+
+    function decrementTimer() {
+      timeAmount--;
+      $(".timer").html(timeConvertor(timeAmount));
+
+      if (timeAmount === 0) {
+        stopTimer();
+      }
+    }
+
+    function stopTimer() {
+      clearInterval(intervalId);
+    }
+
+    function timeConvertor(t) {
+
+      var minutes = Math.floor(t / 60);
+      var seconds = t - (minutes * 60);
+
+      if (seconds < 10) {
+        seconds = "0" + seconds;
+      }
+
+      if (minutes === 0) {
+        minutes = "00";
+      }
+      else if (minutes < 10) {
+        minutes = "0" + minutes;
+      }
+
+      return minutes + ":" + seconds;
+    }
+    //--------------------------------------------------------------------
+
+
     function reset() {
       $(".difficulty-button").off();
       $(".response-button").off();
