@@ -3,8 +3,15 @@ $(document).ready(function() {
 
   runGame();
 
+//--------------------------
+//MAIN RUNGAME FUNCTION
+//--------------------------
+
   function runGame() {
-    //-------------------------------------------------------------------
+
+    //--------------------------
+    //INTIALIZE VARIABLES
+    //--------------------------
 
     let cap = 5;
     let correctQuestions = 0;
@@ -17,16 +24,17 @@ $(document).ready(function() {
     let timeAmount = 60;
     let intervalId;
 
+    // Sets up initial configuration of panels
     $("#start-game-panel").show();
     $("#question-panel").hide();
     $("#correct-panel").hide();
     $("#wrong-panel").hide();
     $("#final-panel").hide();
 
-
-    //-------------------------------------------------------------------
-
+    //--------------------------
     //EVENT HANDLERS
+    //--------------------------
+
     $(".difficulty-button").on("click", function(e) {
 
       if (e.target.id === "easy-button") {
@@ -66,14 +74,7 @@ $(document).ready(function() {
           correctQuestions++;
         }
 
-        $("#numerator").html(correctQuestions);
-        $("#denominator").html(cap);
-        let percentRight = Math.round((correctQuestions / cap) * 100);
-        $("#percentage-correct").html(percentRight);
-
-        $("#question-panel").hide();
-        $("#final-panel").show();
-
+        displayFinalTotals();
         reset();
 
       } else {
@@ -103,8 +104,10 @@ $(document).ready(function() {
       $("#wrong-panel").hide();
     });
 
-    //-------------------------------------------------------------------
-    // TIMER RELATED FUNCTIONS
+    //--------------------------
+    //TIMING RELATED FUNCTIONS
+    //--------------------------
+
     function runTimer() {
       intervalId = setInterval(decrementTimer, 1000);
     }
@@ -115,6 +118,7 @@ $(document).ready(function() {
 
       if (timeAmount === 0) {
         stopTimer();
+        displayFinalTotals();
       }
     }
 
@@ -140,16 +144,31 @@ $(document).ready(function() {
 
       return minutes + ":" + seconds;
     }
-    //--------------------------------------------------------------------
 
+    //--------------------------
+    //GENERAL FUNCTIONS
+    //--------------------------
 
+    function displayFinalTotals() {
+      $("#numerator").html(correctQuestions);
+      $("#denominator").html(cap);
+      let percentRight = Math.round((correctQuestions / cap) * 100);
+      $("#percentage-correct").html(percentRight);
+      $("#question-panel").hide();
+      $("#final-panel").show();
+      return;
+    }
+
+    /* Reset function
+    turns off button event handlers
+    */
     function reset() {
       $(".difficulty-button").off();
       $(".response-button").off();
       return;
     }
 
-    /*
+    /* RandomIndicesArr Function
     generates an array of individually unique
     "max" indices, each from 1 to lng
     */
@@ -165,7 +184,11 @@ $(document).ready(function() {
       return array;
     }
 
-
+    /* setQuestion function
+    adds the values for the question and answers
+    to the question panel to be displayed for
+    the user
+    */
     function setQuestion(obj) {
       $("#question-text").html(obj.question);
       for (i = 0; i < obj.responses.length; i++) {
@@ -175,6 +198,10 @@ $(document).ready(function() {
     } // end setQuestion function
 
 
+    /* checkQuestion function
+      checks if the answer given is equivalent
+      to the question answer
+    */
     function checkQuestion(answer, guess) {
 
       if (guess === answer) {
@@ -191,11 +218,12 @@ $(document).ready(function() {
       } // end else statement
     } // end checkQuestion function
 
-    //-------------------------------------------------------------------
-
   } // end runGame function
 }); // end document.ready()
 
+//--------------------------
+//ARRAY OF QUESTIONS OBJECTS
+//--------------------------
 
 const easyQuestions = [{
     id: 1,
