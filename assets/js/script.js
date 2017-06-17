@@ -50,6 +50,8 @@ $(document).ready(function() {
       // Loads up the first question into the question panel
       let difRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
       setQuestion(difRandomQuestion);
+
+      // displays the question number
       totalQuestions++;
       $("#question-number").html(totalQuestions);
 
@@ -85,7 +87,6 @@ $(document).ready(function() {
 
         questionIndex++;
         let respRandomQuestion = questionsArr[questionNumbersArr[questionIndex]];
-
         setQuestion(respRandomQuestion);
 
       }
@@ -93,6 +94,7 @@ $(document).ready(function() {
 
     $("#restart-button").on('click', function() {
       $("#final-panel").hide();
+      stopTimer();
       reset();
       runGame();
     });
@@ -156,7 +158,6 @@ $(document).ready(function() {
       $("#percentage-correct").html(percentRight);
       $("#question-panel").hide();
       $("#final-panel").show();
-      return;
     }
 
     /* Reset function
