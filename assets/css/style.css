@@ -2,6 +2,8 @@ body {
   background-image: url("../img/superheroes_background.jpg");
   background-position: center center;
   background-repeat: no-repeat;
+  max-height: 100vh;
+  min-height: 100vh;
 }
 
 .quiz-block {
